@@ -3,12 +3,12 @@ import java.io.File
 
 fun main(args: Array<String>) {
   val automata = Gson()
-      .fromJson(File("input/task1.json").reader(), Automata::class.java)
+      .fromJson(File("input/task1.json").reader(), AutomataEntity::class.java)
   automate(automata)
   println("Done.")
 }
 
-fun automate(automata: Automata) {
+fun automate(automata: AutomataEntity) {
   println("Start automation for automata: $automata")
   // Process automata algorithm
   val resultantState = processAlgorithm(automata)
@@ -17,7 +17,7 @@ fun automate(automata: Automata) {
   validateState(resultantState, automata.finalState)
 }
 
-private fun processAlgorithm(automata: Automata): Set<String> {
+private fun processAlgorithm(automata: AutomataEntity): Set<String> {
   val currentState = automata.initialState
   for (symbol in automata.alphabet) {
     val newState = currentState
@@ -38,17 +38,17 @@ private fun processAlgorithm(automata: Automata): Set<String> {
 
 fun validateState(state: Set<String>, finalState: Set<String>) {
   if (finalState.any { state.contains(it) })
-    throw Exception("Automata has stopped with non-final state.")
+    throw Exception("AutomataEntity has stopped with non-final state.")
 }
 
-data class Automata(
+data class AutomataEntity(
     val alphabet: String,
     val initialState: MutableSet<String>,
     val finalState: Set<String>,
     val transitions: Map<String, Map<Char, Set<String>>>) {
 
   override fun toString(): String {
-    return "Automata(\nalphabet='$alphabet',\ninitialState=$initialState,\n" +
+    return "AutomataEntity(\nalphabet='$alphabet',\ninitialState=$initialState,\n" +
         "finalStates=$finalState,\ntransitions=$transitions)"
   }
 }

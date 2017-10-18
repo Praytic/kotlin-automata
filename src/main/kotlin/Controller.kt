@@ -2,27 +2,21 @@
 import javax.xml.bind.DatatypeConverter.parseString
 
 /**
- * Возвращает удовлетворяет ли строка автомату.
+ * Возвращает удовлетворяет ли строка [inputString] автомату [automata].
  */
-fun <T> task1(automaton: Automation, inputString: String): Boolean {
-  val line = inputString.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-  var S: Array<String> = arrayOf(automaton.initialState)
-  var newS: Array<String> = arrayOf()
-  for (i in line.indices) {
-    if (automaton.alphabetContains(line[i]) && S.isNotEmpty()) {
-      for (j in S.indices) {
-        newS += automaton.getTable(S[j], line[i])
+fun task1(automata: Automata, inputString: String): Boolean {
+  var currentStates: Array<String> = arrayOf(automata.initialState)
+  var nextStates = arrayOf<String>()
+  for (symbol in inputString) {
+    if (automata.alphabetContains(symbol) && currentStates.isNotEmpty()) {
+      for (j in currentStates.indices) {
+        nextStates += automata.getNextStates(currentStates[j], symbol)
       }
-      S = newS
-      newS = arrayOf()
-    } else
-      return false
+      currentStates = nextStates
+      nextStates = arrayOf()
+    } else return false
   }
-  for (item in S) {
-    if (automaton.containsEnd(item))
-      return true
-  }
-  return false
+  return currentStates.any { automata.isFinalState(it) }
 }
 
 /**
@@ -32,22 +26,19 @@ fun <T> task1(automaton: Automation, inputString: String): Boolean {
  * достает новый переход, потом он меняет их местами (в S лежит куда перешел, а второй оьнуляет).
  * Потом проверяет если в S лежат сигналы заключетельные, тогда н сохраняет длину
  * строки, которую он прошел и сохраняет в результате.
- * @param automaton
+ * @param automata
  * @param inputString
  * @param index
  * @return
  */
-fun f(automaton: Automation, inputString: String, index: Int): Int {
-  println("inputString: $inputString, index: $index")
-  val line = inputString.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-  var S = arrayOf(automaton.initialState)
+fun f(automata: Automata, inputString: String, index: Int): Int {
+  var S = arrayOf(automata.initialState)
   var newS: Array<String> = arrayOf()
   var result = 0
-  for (i in index until line.size) {
-    if (automaton.alphabetContains(line[i])) {
+  for (i in index until inputString.length) {
+    if (automata.alphabetContains(inputString[i])) {
       for (j in S.indices) {
-        newS += automaton.getTable(S[j], line[i])
-        println("newS: ${newS.toList()}")
+        newS += automata.getNextStates(S[j], inputString[i])
       }
     }
     //System.out.println(newS[0]);
@@ -55,9 +46,8 @@ fun f(automaton: Automation, inputString: String, index: Int): Int {
       S = newS
       newS = arrayOf()
       for (item in S) {
-        if (automaton.containsEnd(item)) {
+        if (automata.isFinalState(item)) {
           result = i - index + 1
-          println("result: $result")
         }
       }
     } else break
@@ -65,24 +55,19 @@ fun f(automaton: Automation, inputString: String, index: Int): Int {
   return if (result != 0) result else -1
 }
 
-// Находит все подстроки в строке, являющиеся вещественынми числами.
-fun task2(automaton: Automation, inputString: String): String {
+/**
+ * Находит все подстроки в строке [inputString], являющиеся вещественынми числами.
+ */
+fun task2(automaton: Automata, inputString: String): String {
   var n: Int
   val result = StringBuilder()
   var index = 0
   while (index < inputString.length) {
     n = f(automaton, inputString, index)
-    println("n: $n")
     if (n != -1) {
-      result.append(parseString(inputString.substring(index,
-                                                      index + n)) + "|")
+      result.append(parseString(inputString.substring(index, index + n)) + "|")
       index += n
-    } else
-      index++
-    println("task2: $result")
+    } else index++
   }
-  return if (result.toString() != "")
-    result.toString()
-  else
-    "Nothing"
+  return result.toString()
 }
