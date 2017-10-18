@@ -12,6 +12,20 @@ abstract class Automata(
     }
   }
 
+  fun getNextStates(currentState: String, signal: Char): Array<String> {
+    if (!transitions.containsKey(currentState)) return arrayOf()
+
+    var nextStates = arrayOf<String>()
+    when {
+      transitions[currentState]?.containsKey(signal) ?: false ->
+        nextStates = transitions[currentState]?.get(signal) ?: arrayOf()
+      signal.isLetter() && transitions[currentState]?.containsKey('W') ?: false ->
+        nextStates = transitions[currentState]?.get('W') ?: arrayOf()
+      signal.isDigit() && transitions[currentState]?.containsKey('D') ?: false ->
+        nextStates = transitions[currentState]?.get('D') ?: arrayOf()
+    }
+    return nextStates
+  }
+
   abstract fun isFinalState(currentState: String): Boolean
-  abstract fun getNextStates(currentState: String, signal: Char): Array<String>
 }
