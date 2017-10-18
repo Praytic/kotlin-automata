@@ -49,6 +49,6 @@ data class Automata(
 
   override fun toString(): String {
     return "Automata(\nalphabet='$alphabet',\ninitialState=$initialState,\n" +
-        "finalState=$finalState,\ntransitions=$transitions)"
+        "finalStates=$finalState,\ntransitions=$transitions)"
   }
 }

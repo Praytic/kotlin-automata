@@ -4,20 +4,10 @@ import java.util.*
 class IndeterminateAutomaton(
     priority: Int,
     alphabet: Array<String>,
-    initialState: Array<String>,
-    val finalState: Array<String>,
-    val transitions: SortedMap<String, SortedMap<String, Array<String>>>) : Automation(alphabet, priority,
-                                                                                       initialState) {
-
-  // 3 задание
-  private fun parseString(str: String): String {
-    when (str) {
-      "\\t" -> return "\t"
-      "\\n" -> return "\n"
-      "\\r" -> return "\r"
-      else -> return str
-    }
-  }
+    initialState: String,
+    finalState: Array<String>,
+    transitions: SortedMap<String, SortedMap<String, Array<String>>>)
+  : Automation(alphabet, priority, initialState, finalState, transitions) {
 
   override fun containsABC(signal: String): Boolean {
     for (item in alphabet) {
@@ -34,7 +24,7 @@ class IndeterminateAutomaton(
   }
 
   override fun containsEnd(condition: String): Boolean {
-    for (item in finalState) {
+    for (item in finalStates) {
       if (item == condition)
         return true
     }

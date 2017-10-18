@@ -4,12 +4,12 @@ import java.util.*
 class Controler {
 
   // Возвращает удовл. ли строка автомату
-  fun task1(automaton: Automation, inputString: String): Boolean {
+  fun <T> task1(automaton: Automation, inputString: String): Boolean {
     val line = inputString.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-    var S: Array<String>? = automaton.begin
+    var S: Array<String> = arrayOf(automaton.initialState)
     var newS: Array<String> = arrayOf()
     for (i in line.indices) {
-      if (automaton.containsABC(line[i]) && S != null) {
+      if (automaton.containsABC(line[i]) && S.isNotEmpty()) {
         for (j in S.indices) {
           newS = concatArray(newS, automaton.getTable(S[j], line[i]))
         }
@@ -18,11 +18,9 @@ class Controler {
       } else
         return false
     }
-    if (S != null) {
-      for (item in S) {
-        if (automaton.containsEnd(item))
-          return true
-      }
+    for (item in S) {
+      if (automaton.containsEnd(item))
+        return true
     }
     return false
   }
@@ -42,7 +40,7 @@ class Controler {
   fun f(automaton: Automation, inputString: String, index: Int): Int {
     println("inputString: $inputString, index: $index")
     val line = inputString.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-    var S = automaton.begin
+    var S = arrayOf(automaton.initialState)
     var newS: Array<String> = arrayOf()
     var result = 0
     for (i in index until line.size) {
@@ -63,7 +61,6 @@ class Controler {
           }
         }
       } else break
-
     }
     return if (result != 0) result else -1
   }

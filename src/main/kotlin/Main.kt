@@ -4,7 +4,7 @@ import java.util.*
 import javax.xml.bind.DatatypeConverter.parseString
 
 fun main(args: Array<String>) {
-  println(Controler().task2(read2("input/real.txt", 1), "2.5asdasd 24"))
+  println(Controler().task2(read2("input/real.txt", 1), "2.5asdasd 24,-24e2;sd4e-2.3"))
 }
 
 fun read1(way: String, priority: Int): DeterministicAutomaton {
@@ -51,5 +51,5 @@ fun read2(way: String, priority: Int): IndeterminateAutomaton {
     s = `in`.readLine()
   }
   `in`.close()
-  return IndeterminateAutomaton(priority, abc, begin, end, table)
+  return IndeterminateAutomaton(priority, abc, begin[0], end, table)
 }
