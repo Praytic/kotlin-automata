@@ -2,9 +2,8 @@ class DeterministicAutomaton(
     alphabet: Array<String>,
     initialState: String,
     finalState: String,
-    transitions: Map<String, Map<String, String>>,
-    priority: Int)
-  : Automation(alphabet, priority, initialState, arrayOf(finalState),
+    transitions: Map<String, Map<String, String>>)
+  : Automation(alphabet, initialState, arrayOf(finalState),
                transitions.map {
                  it.key to it.value.map {
                    it.key to arrayOf(it.value)
@@ -17,20 +16,6 @@ class DeterministicAutomaton(
       it.key to it.value[0]
     }.toMap()
   }.toMap()
-
-  override fun containsABC(signal: String): Boolean {
-    for (item in alphabet) {
-      when (item) {
-        "\\W" -> if (signal.matches("\\w".toRegex()))
-          return true
-        "\\D" -> if (signal.matches("\\d".toRegex()))
-          return true
-        else -> if (item == signal)
-          return true
-      }
-    }
-    return false
-  }
 
   override fun containsEnd(condition: String): Boolean {
     return finalState == condition

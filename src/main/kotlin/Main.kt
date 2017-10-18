@@ -4,10 +4,10 @@ import java.util.*
 import javax.xml.bind.DatatypeConverter.parseString
 
 fun main(args: Array<String>) {
-  println(Controler().task2(read2("input/real.txt", 1), "2.5asdasd 24,-24e2;sd4e-2.3"))
+  println(task2(read2("input/real.txt"), "2.5asdasd 24,-24e2;sd4e-2.3"))
 }
 
-fun read1(way: String, priority: Int): DeterministicAutomaton {
+fun read1(way: String): DeterministicAutomaton {
   val `in` = BufferedReader(FileReader(way))
   val begin = `in`.readLine().split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
   val end = `in`.readLine().split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
@@ -26,10 +26,10 @@ fun read1(way: String, priority: Int): DeterministicAutomaton {
     s = `in`.readLine()
   }
   `in`.close()
-  return DeterministicAutomaton(abc, begin, end, table, priority)
+  return DeterministicAutomaton(abc, begin, end, table)
 }
 
-fun read2(way: String, priority: Int): IndeterminateAutomaton {
+fun read2(way: String): IndeterminateAutomaton {
   val `in` = BufferedReader(FileReader(way))
   val begin = `in`.readLine().split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
   val end = `in`.readLine().split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -51,5 +51,5 @@ fun read2(way: String, priority: Int): IndeterminateAutomaton {
     s = `in`.readLine()
   }
   `in`.close()
-  return IndeterminateAutomaton(priority, abc, begin[0], end, table)
+  return IndeterminateAutomaton(abc, begin[0], end, table)
 }
