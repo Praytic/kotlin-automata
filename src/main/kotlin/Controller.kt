@@ -17,13 +17,13 @@ fun task1(automata: Automata, inputString: String): Boolean {
 }
 
 /**
- * Находит все подстроки в строке [inputString], являющиеся вещественынми числами.
+ * Находит все подстроки в строке [inputString], удовлетворяющие автомату [automata].
  */
-fun task2(automaton: Automata, inputString: String): List<String> {
+fun task2(automata: Automata, inputString: String): List<String> {
   val result = arrayListOf<String>()
   var index = 0
   while (index < inputString.length) {
-    val n = f(automaton, inputString, index)
+    val n = f(automata, inputString, index)
     if (n > 0) {
       result += inputString.substring(index, index + n)
       index += n
@@ -33,16 +33,8 @@ fun task2(automaton: Automata, inputString: String): List<String> {
 }
 
 /**
- * Эта функция выводит длину подстроки удовлетв. автомату. Если таковой нет,
- * то она выводит -1. Она проходит по циклу индексов. Если первый символ удв.
- * автомату (проверка подходит к алфавиту), тогда он достает переход куда и
- * достает новый переход, потом он меняет их местами (в S лежит куда перешел, а второй оьнуляет).
- * Потом проверяет если в S лежат сигналы заключетельные, тогда н сохраняет длину
- * строки, которую он прошел и сохраняет в результате.
- * @param automata
- * @param inputString
- * @param index
- * @return
+ * Возвращает длину подстроки в строке [inputString] удовлетворяющей автомату [automata]
+ * начиная с индекса [index].
  */
 fun f(automata: Automata, inputString: String, index: Int): Int {
   var currentStates = arrayOf(automata.initialState)
