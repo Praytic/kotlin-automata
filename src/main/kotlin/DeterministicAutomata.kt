@@ -3,7 +3,7 @@ class DeterministicAutomata(
     initialState: String,
     finalState: String,
     transitions: Map<String, Map<Char, String>>)
-  : Automata(alphabet, initialState, arrayOf(finalState),
+  : Automata(alphabet, arrayOf(initialState), arrayOf(finalState),
              transitions.map {
                  it.key to it.value.map {
                    it.key to arrayOf(it.value)

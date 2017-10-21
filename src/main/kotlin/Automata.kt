@@ -1,6 +1,6 @@
 abstract class Automata(
     val alphabet: String,
-    val initialState: String,
+    val initialStates: Array<String>,
     val finalStates: Array<String>,
     val transitions: Map<String, Map<Char, Array<String>>>) {
 

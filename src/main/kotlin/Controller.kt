@@ -2,7 +2,7 @@
  * Возвращает удовлетворяет ли строка [inputString] автомату [automata].
  */
 fun task1(automata: Automata, inputString: String): Boolean {
-  var currentStates: Array<String> = arrayOf(automata.initialState)
+  var currentStates: Array<String> = automata.initialStates
   var nextStates = arrayOf<String>()
   for (symbol in inputString) {
     if (automata.alphabetContains(symbol) && currentStates.isNotEmpty()) {
@@ -37,7 +37,7 @@ fun task2(automata: Automata, inputString: String): List<String> {
  * начиная с индекса [index].
  */
 fun f(automata: Automata, inputString: String, index: Int): Int {
-  var currentStates = arrayOf(automata.initialState)
+  var currentStates = automata.initialStates
   var nextStates = arrayOf<String>()
   var result = 0
   for (i in index until inputString.length) {

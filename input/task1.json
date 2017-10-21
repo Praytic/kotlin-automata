@@ -1,6 +1,8 @@
 {
   "alphabet": "D+-.eE",
-  "initialState": "1",
+  "initialStates": [
+    "1"
+  ],
   "finalStates": [
     "2", "3", "5", "9"
   ],
