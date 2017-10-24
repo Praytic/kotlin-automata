@@ -2,15 +2,15 @@
  * Возвращает удовлетворяет ли строка [inputString] автомату [automata].
  */
 fun task1(automata: Automata, inputString: String): Boolean {
-  var currentStates: Array<String> = automata.initialStates
-  var nextStates = arrayOf<String>()
+  var currentStates = automata.initialStates.toList()
+  var nextStates = mutableSetOf<String>()
   for (symbol in inputString) {
-    if (automata.alphabetContains(symbol) && currentStates.isNotEmpty()) {
+    if (automata.alphabetContains(symbol.toString()) && currentStates.isNotEmpty()) {
       for (j in currentStates.indices) {
-        nextStates += automata.getNextStates(currentStates[j], symbol)
+        nextStates.addAll(automata.getNextStates(currentStates[j], symbol.toString()))
       }
-      currentStates = nextStates
-      nextStates = arrayOf()
+      currentStates = nextStates.toList()
+      nextStates = mutableSetOf()
     } else return false
   }
   return currentStates.any { automata.isFinalState(it) }
@@ -38,17 +38,17 @@ fun task2(automata: Automata, inputString: String): List<String> {
  */
 fun f(automata: Automata, inputString: String, index: Int): Int {
   var currentStates = automata.initialStates
-  var nextStates = arrayOf<String>()
+  var nextStates = mutableSetOf<String>()
   var result = 0
   for (i in index until inputString.length) {
-    if (automata.alphabetContains(inputString[i])) {
+    if (automata.alphabetContains(inputString[i].toString())) {
       currentStates.forEach {
-        nextStates += automata.getNextStates(it, inputString[i])
+        nextStates.addAll(automata.getNextStates(it, inputString[i].toString()))
       }
     }
     if (nextStates.isNotEmpty()) {
       currentStates = nextStates
-      nextStates = arrayOf()
+      nextStates = mutableSetOf()
       if (currentStates.any { automata.isFinalState(it) }) {
         result = i - index + 1
       }

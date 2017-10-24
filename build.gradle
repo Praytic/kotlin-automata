@@ -12,9 +12,12 @@ buildscript {
     }
 }
 
+apply plugin: 'application'
 apply plugin: 'kotlin'
 
 sourceCompatibility = 1.8
+
+mainClassName = 'MainKt'
 
 sourceSets {
     main.kotlin.srcDirs += 'src/main/kotlin'

@@ -1,28 +1,28 @@
 abstract class Automata(
-    val alphabet: String,
-    val initialStates: Array<String>,
-    val finalStates: Array<String>,
-    val transitions: Map<String, Map<Char, Array<String>>>) {
+    val alphabet: Set<String>,
+    val initialStates: Set<String>,
+    val finalStates: Set<String>,
+    val transitions: Map<String, Map<String, Set<String>>>) {
 
-  fun alphabetContains(signal: Char) = alphabet.any {
+  fun alphabetContains(signal: String) = alphabet.any {
     when(it) {
-      'W' -> signal.isLetter()
-      'D' -> signal.isDigit()
+      "/W" -> signal.all { it.isLetter() }
+      "/D" -> signal.all { it.isDigit() }
       else -> it == signal
     }
   }
 
-  fun getNextStates(currentState: String, signal: Char): Array<String> {
-    if (!transitions.containsKey(currentState)) return arrayOf()
+  fun getNextStates(currentState: String, signal: String): Set<String> {
+    if (!transitions.containsKey(currentState)) return emptySet()
 
-    var nextStates = arrayOf<String>()
+    var nextStates = setOf<String>()
     when {
       transitions[currentState]?.containsKey(signal) ?: false ->
-        nextStates = transitions[currentState]?.get(signal) ?: arrayOf()
-      signal.isLetter() && transitions[currentState]?.containsKey('W') ?: false ->
-        nextStates = transitions[currentState]?.get('W') ?: arrayOf()
-      signal.isDigit() && transitions[currentState]?.containsKey('D') ?: false ->
-        nextStates = transitions[currentState]?.get('D') ?: arrayOf()
+        nextStates = transitions[currentState]?.get(signal) ?: emptySet()
+      signal.all { it.isLetter() } && transitions[currentState]?.containsKey("/W") ?: false ->
+        nextStates = transitions[currentState]?.get("/W") ?: emptySet()
+      signal.all { it.isDigit() } && transitions[currentState]?.containsKey("/D") ?: false ->
+        nextStates = transitions[currentState]?.get("/D") ?: emptySet()
     }
     return nextStates
   }
