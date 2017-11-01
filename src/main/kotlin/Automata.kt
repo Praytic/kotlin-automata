@@ -1,4 +1,6 @@
 abstract class Automata(
+    val name: String = "",
+    val priority: Int = 1,
     val alphabet: Set<String>,
     val initialStates: Set<String>,
     val finalStates: Set<String>,
@@ -8,6 +10,7 @@ abstract class Automata(
     when(it) {
       "/W" -> signal.all { it.isLetter() }
       "/D" -> signal.all { it.isDigit() }
+      "/S" -> signal.all { it.isWhitespace() }
       else -> it == signal
     }
   }
@@ -23,9 +26,15 @@ abstract class Automata(
         nextStates = transitions[currentState]?.get("/W") ?: emptySet()
       signal.all { it.isDigit() } && transitions[currentState]?.containsKey("/D") ?: false ->
         nextStates = transitions[currentState]?.get("/D") ?: emptySet()
+      signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey("/S") ?: false ->
+        nextStates = transitions[currentState]?.get("/S") ?: emptySet()
     }
     return nextStates
   }
 
-  abstract fun isFinalState(currentState: String): Boolean
+  fun isFinalState(currentState: String) = finalStates.any { it == currentState }
+
+  override fun toString(): String {
+    return "Automata($name)"
+  }
 }

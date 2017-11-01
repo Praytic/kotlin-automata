@@ -1,18 +1,20 @@
 class DeterministicAutomata(
+    name: String,
+    priority: Int,
     alphabet: Set<String>,
     initialState: String,
-    finalState: String,
+    finalStates: Set<String>,
     transitions: Map<String, Map<String, String>>)
-  : Automata(alphabet, setOf(initialState), setOf(finalState),
+  : Automata(name, priority, alphabet, setOf(initialState), finalStates,
              transitions.map {
                  it.key to it.value.map {
                    it.key to setOf(it.value)
                  }.toMap()
                }.toMap()) {
 
-  val finalState: String get() = super.finalStates.single()
-
-  override fun isFinalState(currentState: String): Boolean {
-    return finalState == currentState
-  }
+  val transition: Map<String, Map<String, String>> get() = super.transitions.map {
+    it.key to it.value.map {
+      it.key to it.value.single()
+    }.toMap()
+  }.toMap()
 }

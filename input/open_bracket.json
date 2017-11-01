@@ -1,0 +1,16 @@
+{
+  "name": "OpenBkt",
+  "priority": 4,
+  "alphabet": [
+    "("
+  ],
+  "initialStates": [
+    "1"
+  ],
+  "finalStates": [
+    "2"
+  ],
+  "transitions": {
+    "1": {"(": ["2"]}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Int",
+  "priority": 3,
+  "alphabet": [
+    "/D", "+", "-"
+  ],
+  "initialStates": [
+    "1"
+  ],
+  "finalStates": [
+    "2"
+  ],
+  "transitions": {
+    "1": {"/D": ["2"], "+": ["2"], "-": ["2"]},
+    "2": {"/D": ["2"]}
+  }
+}

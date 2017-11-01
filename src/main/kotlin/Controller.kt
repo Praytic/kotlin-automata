@@ -33,6 +33,41 @@ fun task2(automata: Automata, inputString: String): List<String> {
 }
 
 /**
+ * Проводит лексический анализ входящей строки [inputString] согласно автоматам [automatas]
+ * и возвращает список найденных токенов в порядке их появления в строке.
+ */
+fun task3(automatas: List<Automata>, inputString: String): Map<Automata, List<String>> {
+  println("Starting task3... ")
+  val result = automatas.map { it to mutableListOf<String>() }.toMap()
+  var index = 0
+  while (index < inputString.length) {
+    print("\n[$index] Inspecting substring [${replaceWithEscapeSymbols(inputString.substring(index))}]... ")
+    val bestMatch = automatas.map { it to f(it, inputString, index) }
+        .maxWith(Comparator { o1, o2 ->
+          if (o1.second > o2.second) 1
+          else if (o1.second < o2.second) -1
+          else if (o1.first.priority > o2.first.priority) 1
+          else if (o1.first.priority < o2.first.priority) -1
+          else 0
+        })
+
+    if (bestMatch != null && bestMatch.second > 0) {
+      val satisfyingString = replaceWithEscapeSymbols(
+          inputString.substring(index, index + bestMatch.second))
+      result[bestMatch.first]?.add(satisfyingString)
+      index += bestMatch.second
+      println("Found substring [$satisfyingString] with [${bestMatch.first}].")
+    }
+    else {
+      index++
+      println("No substrings were found.")
+    }
+  }
+  println("End of task3.")
+  return result
+}
+
+/**
  * Возвращает длину подстроки в строке [inputString] удовлетворяющей автомату [automata]
  * начиная с индекса [index].
  */

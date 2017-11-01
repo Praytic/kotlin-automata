@@ -1,4 +1,6 @@
 {
+  "name": "Real",
+  "priority": 2,
   "alphabet": [
     "/D", "+", "-", ".", "e", "E"
   ],
