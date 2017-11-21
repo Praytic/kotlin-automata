@@ -36,9 +36,9 @@ fun task2(automata: Automata, inputString: String): List<String> {
  * Проводит лексический анализ входящей строки [inputString] согласно автоматам [automatas]
  * и возвращает список найденных токенов в порядке их появления в строке.
  */
-fun task3(automatas: List<Automata>, inputString: String): Map<Automata, List<String>> {
+fun task3(automatas: List<Automata>, inputString: String): List<Pair<Automata, String>> {
   println("Starting task3... ")
-  val result = automatas.map { it to mutableListOf<String>() }.toMap()
+  val result = mutableListOf<Pair<Automata, String>>()
   var index = 0
   while (index < inputString.length) {
     print("\n[$index] Inspecting substring [${replaceWithEscapeSymbols(inputString.substring(index))}]... ")
@@ -54,7 +54,7 @@ fun task3(automatas: List<Automata>, inputString: String): Map<Automata, List<St
     if (bestMatch != null && bestMatch.second > 0) {
       val satisfyingString = replaceWithEscapeSymbols(
           inputString.substring(index, index + bestMatch.second))
-      result[bestMatch.first]?.add(satisfyingString)
+      result += Pair(bestMatch.first, satisfyingString)
       index += bestMatch.second
       println("Found substring [$satisfyingString] with [${bestMatch.first}].")
     }

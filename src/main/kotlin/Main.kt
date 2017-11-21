@@ -2,20 +2,9 @@ import com.google.gson.Gson
 import java.io.File
 
 fun main(args: Array<String>) {
-  val automatas = arrayListOf<Automata>(
-      Gson().fromJson(File("input/identificator.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/keyword.json").reader(), IndeterminateAutomata::class.java),
-      Gson().fromJson(File("input/integer_number.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/real_number.json").reader(), IndeterminateAutomata::class.java),
-      Gson().fromJson(File("input/open_bracket.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/close_bracket.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/space.json").reader(), DeterministicAutomata::class.java))
-
-  val results = task3(automatas, "2.5asdaifs define if 24,-24e2;())(sd4e-2.3\t\n dep conlambdadac")
-  println()
-  println("Result:")
-  for (result in results) {
-    println(result)
+  File("input/input_task4.txt").readLines().forEach {
+    val automata = parseRegularExpression(it)
+    File("output/$automata.json").writeText(Gson().toJson(automata))
   }
 }
 
@@ -32,4 +21,22 @@ fun replaceWithEscapeSymbols(str: String): String {
     }
   }
   return newStr
+}
+
+fun parseRegularExpression(str: String): Automata {
+  val lex = str.split(':')
+  val tokenName = lex[0]
+  val priority = lex[1]
+  val regularExpression = lex[2]
+  val alphabet = setOf<String>()
+  val initialStates = setOf<String>()
+  val finalStates = setOf<String>()
+  val transitions = mapOf<String, Map<String, Set<String>>>()
+  return IndeterminateAutomata(
+      tokenName,
+      priority.toInt(),
+      alphabet,
+      initialStates,
+      finalStates,
+      transitions)
 }

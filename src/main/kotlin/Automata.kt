@@ -11,6 +11,7 @@ abstract class Automata(
       "/W" -> signal.all { it.isLetter() }
       "/D" -> signal.all { it.isDigit() }
       "/S" -> signal.all { it.isWhitespace() }
+      "/*" -> signal != "|"
       else -> it == signal
     }
   }
@@ -28,6 +29,8 @@ abstract class Automata(
         nextStates = transitions[currentState]?.get("/D") ?: emptySet()
       signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey("/S") ?: false ->
         nextStates = transitions[currentState]?.get("/S") ?: emptySet()
+      signal != "|" && transitions[currentState]?.containsKey("/*") ?: false ->
+        nextStates = transitions[currentState]?.get("/*") ?: emptySet()
     }
     return nextStates
   }
@@ -35,6 +38,6 @@ abstract class Automata(
   fun isFinalState(currentState: String) = finalStates.any { it == currentState }
 
   override fun toString(): String {
-    return "Automata($name)"
+    return name
   }
 }
