@@ -5,7 +5,7 @@ fun task1(automata: Automata, inputString: String): Boolean {
   var currentStates = automata.initialStates.toList()
   var nextStates = mutableSetOf<String>()
   for (symbol in inputString) {
-    if (automata.alphabetContains(symbol.toString()) && currentStates.isNotEmpty()) {
+    if (currentStates.isNotEmpty()) {
       for (j in currentStates.indices) {
         nextStates.addAll(automata.getNextStates(currentStates[j], symbol.toString()))
       }
@@ -76,10 +76,8 @@ fun f(automata: Automata, inputString: String, index: Int): Int {
   var nextStates = mutableSetOf<String>()
   var result = 0
   for (i in index until inputString.length) {
-    if (automata.alphabetContains(inputString[i].toString())) {
-      currentStates.forEach {
-        nextStates.addAll(automata.getNextStates(it, inputString[i].toString()))
-      }
+    currentStates.forEach {
+      nextStates.addAll(automata.getNextStates(it, inputString[i].toString()))
     }
     if (nextStates.isNotEmpty()) {
       currentStates = nextStates

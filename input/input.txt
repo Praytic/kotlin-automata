@@ -1,0 +1,13 @@
+	var a = 5
+if( a * 10 not 6.7e+4) then
+	let k = 3.e4 3e4 3.e+5 .4e
+
+
+
+
+
+
+
+	           false, b = true
+
+	 a--,b++

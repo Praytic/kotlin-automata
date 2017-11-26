@@ -1,9 +1,9 @@
 class IndeterminateAutomata(
-    name: String,
-    priority: Int,
-    alphabet: Set<String>,
-    initialStates: Set<String>,
-    finalState: Set<String>,
-    transitions: Map<String, Map<String, Set<String>>>)
-  : Automata(name, priority, alphabet, initialStates, finalState, transitions) {
+    name: String = "Empty",
+    priority: Int = 1,
+    alphabet: Set<String> = setOf(),
+    initialStates: Set<String> = setOf(),
+    finalStates: Set<String> = setOf(),
+    transitions: Map<String, Map<String, Set<String>>> = mapOf())
+  : Automata(name, priority, alphabet, initialStates, finalStates, transitions) {
 }

@@ -1,11 +1,27 @@
-import com.google.gson.Gson
+
 import java.io.File
 
+val controlSymbols = arrayOf('?', '(', ')', '|', '*')
+val groupedSymbols = arrayOf("/D", "/W", "/?", "/S")
+
 fun main(args: Array<String>) {
-  File("input/input_task4.txt").readLines().forEach {
+  val automatas = mutableListOf<Automata>()
+  File("input/input_task4_2.txt").readLines().forEach {
     val automata = parseRegularExpression(it)
-    File("output/$automata.json").writeText(Gson().toJson(automata))
+    //File("output/$automata.json").writeText(Gson().toJson(automata))
+    automatas.add(automata)
   }
+
+  val results = task3(automatas, File("input/input.txt").readText())
+
+  var stringResult = ""
+  println("\nResults:\n")
+  for (result in results) {
+    stringResult += "<${result.first}, ${result.second}>\n"
+  }
+
+  println(stringResult)
+  File("output/output_4.txt").writeText(stringResult)
 }
 
 fun replaceWithEscapeSymbols(str: String): String {
@@ -28,15 +44,27 @@ fun parseRegularExpression(str: String): Automata {
   val tokenName = lex[0]
   val priority = lex[1]
   val regularExpression = lex[2]
-  val alphabet = setOf<String>()
-  val initialStates = setOf<String>()
-  val finalStates = setOf<String>()
-  val transitions = mapOf<String, Map<String, Set<String>>>()
+
+  val parser = Parser()
+  val automata = parser.calculate(parser.parse(regularExpression, makeRegular(regularExpression)))
   return IndeterminateAutomata(
-      tokenName,
-      priority.toInt(),
-      alphabet,
-      initialStates,
-      finalStates,
-      transitions)
+      name = tokenName,
+      priority = priority.toInt(),
+      alphabet = automata.alphabet,
+      initialStates = automata.initialStates,
+      finalStates = automata.finalStates,
+      transitions = automata.transitions)
+}
+
+fun makeRegular(regular: String): String {
+  var reg = ""
+  for (i in 0..regular.length - 2) {
+    if (regular[i] != '(' && regular[i] != '|' && regular[i] != '^' && regular[i] != '\\' &&
+        regular[i + 1] != ')' && regular[i + 1] != '|' && regular[i + 1] != '*') {
+      reg += regular[i] + "^"
+    }
+    else reg += regular[i]
+  }
+  reg += regular.last()
+  return reg
 }

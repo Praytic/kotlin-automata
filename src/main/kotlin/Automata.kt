@@ -1,5 +1,5 @@
 abstract class Automata(
-    val name: String = "",
+    val name: String,
     val priority: Int = 1,
     val alphabet: Set<String>,
     val initialStates: Set<String>,
@@ -8,10 +8,10 @@ abstract class Automata(
 
   fun alphabetContains(signal: String) = alphabet.any {
     when(it) {
-      "/W" -> signal.all { it.isLetter() }
-      "/D" -> signal.all { it.isDigit() }
-      "/S" -> signal.all { it.isWhitespace() }
-      "/*" -> signal != "|"
+      "\\w" -> signal.all { it.isLetter() }
+      "\\d" -> signal.all { it.isDigit() }
+      "\\s" -> signal.all { it.isWhitespace() }
+      "\\*" -> signal != "|"
       else -> it == signal
     }
   }
@@ -23,14 +23,14 @@ abstract class Automata(
     when {
       transitions[currentState]?.containsKey(signal) ?: false ->
         nextStates = transitions[currentState]?.get(signal) ?: emptySet()
-      signal.all { it.isLetter() } && transitions[currentState]?.containsKey("/W") ?: false ->
-        nextStates = transitions[currentState]?.get("/W") ?: emptySet()
-      signal.all { it.isDigit() } && transitions[currentState]?.containsKey("/D") ?: false ->
-        nextStates = transitions[currentState]?.get("/D") ?: emptySet()
-      signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey("/S") ?: false ->
-        nextStates = transitions[currentState]?.get("/S") ?: emptySet()
-      signal != "|" && transitions[currentState]?.containsKey("/*") ?: false ->
-        nextStates = transitions[currentState]?.get("/*") ?: emptySet()
+      signal.all { it.isLetter() } && transitions[currentState]?.containsKey("\\w") ?: false ->
+        nextStates = transitions[currentState]?.get("\\w") ?: emptySet()
+      signal.all { it.isDigit() } && transitions[currentState]?.containsKey("\\d") ?: false ->
+        nextStates = transitions[currentState]?.get("\\d") ?: emptySet()
+      signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey("\\s") ?: false ->
+        nextStates = transitions[currentState]?.get("\\s") ?: emptySet()
+      signal != "|" && transitions[currentState]?.containsKey("\\*") ?: false ->
+        nextStates = transitions[currentState]?.get("\\*") ?: emptySet()
     }
     return nextStates
   }
