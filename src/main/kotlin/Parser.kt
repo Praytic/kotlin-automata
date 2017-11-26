@@ -86,7 +86,7 @@ class Parser {
         "^" -> stack.push(operation.makeConcatination(stack.pop(), stack.pop()))
         "*" -> stack.push(operation.makeIteration(stack.pop()))
         "\\*" -> stack.push(createNewAutomate("*"))
-        "\\?" -> stack.push(createEmptyAutomate())
+        "?" -> stack.push(createEmptyAutomate())
         "\\(" -> stack.push(createNewAutomate("("))
         "\\)" -> stack.push(createNewAutomate(")"))
         "\\|" -> stack.push(createNewAutomate("|"))
@@ -141,7 +141,11 @@ class Parser {
     var flag = true
 
     fun createEmptyAutomate(): Automata {
-      return IndeterminateAutomata()
+      return IndeterminateAutomata(
+          initialStates = setOf("1"),
+          finalStates = setOf("1"),
+          transitions = mapOf("1" to mapOf<String, Set<String>>())
+      )
     }
   }
 }

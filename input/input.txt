@@ -1,4 +1,4 @@
 define a = -5
-if (a*-1 == 5)
-    a += 1.3e-6 | Some comment *** cond |
+if (a * -1 cond 5)
+    a + 1.3e-6 | Some comment *** cond |
 
