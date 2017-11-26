@@ -11,7 +11,7 @@ abstract class Automata(
       "\\w" -> signal.all { it.isLetter() }
       "\\d" -> signal.all { it.isDigit() }
       "\\s" -> signal.all { it.isWhitespace() }
-      "\\*" -> signal != "|"
+      "\\." -> signal != "|"
       else -> it == signal
     }
   }
@@ -29,8 +29,8 @@ abstract class Automata(
         nextStates = transitions[currentState]?.get("\\d") ?: emptySet()
       signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey("\\s") ?: false ->
         nextStates = transitions[currentState]?.get("\\s") ?: emptySet()
-      signal != "|" && transitions[currentState]?.containsKey("\\*") ?: false ->
-        nextStates = transitions[currentState]?.get("\\*") ?: emptySet()
+      signal != "|" && transitions[currentState]?.containsKey("\\.") ?: false ->
+        nextStates = transitions[currentState]?.get("\\.") ?: emptySet()
     }
     return nextStates
   }

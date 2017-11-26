@@ -6,7 +6,7 @@ val groupedSymbols = arrayOf("/D", "/W", "/?", "/S")
 
 fun main(args: Array<String>) {
   val automatas = mutableListOf<Automata>()
-  File("input/input_task4_2.txt").readLines().forEach {
+  File("input/input_task4.txt").readLines().forEach {
     val automata = parseRegularExpression(it)
     //File("output/$automata.json").writeText(Gson().toJson(automata))
     automatas.add(automata)
@@ -60,8 +60,8 @@ fun makeRegular(regular: String): String {
   var reg = ""
   for (i in 0..regular.length - 2) {
     if (regular[i] != '(' && regular[i] != '|' && regular[i] != '^' && regular[i] != '\\' &&
-        regular[i + 1] != ')' && regular[i + 1] != '|' && regular[i + 1] != '*') {
-      reg += regular[i] + "^"
+        regular[i + 1] != ')' && regular[i + 1] != '|' && regular[i + 1] != '*' || i > 1 && regular[i - 1] == '\\' && regular[i] == '|') {
+      reg += "${regular[i]}^"
     }
     else reg += regular[i]
   }

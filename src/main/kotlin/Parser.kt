@@ -78,7 +78,6 @@ class Parser {
     return postfix
   }
 
-
   fun calculate(postfix: List<String>): Automata {
     val stack = ArrayDeque<Automata>()
     for (x in postfix) {
@@ -90,6 +89,7 @@ class Parser {
         "\\?" -> stack.push(createEmptyAutomate())
         "\\(" -> stack.push(createNewAutomate("("))
         "\\)" -> stack.push(createNewAutomate(")"))
+        "\\|" -> stack.push(createNewAutomate("|"))
         else -> stack.push(createNewAutomate(x))
       }
     }

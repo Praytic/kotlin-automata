@@ -1,7 +1,7 @@
-Real:2:(+|-|?)((/D(/D)*)|(/D(/D)*).|.(/D(/D)*)|(/D(/D)*).(/D(/D)*))(?|((e|E)(+|-|?)(/D(/D)*)))
-Int:3:(+|-|?)(/D(/D*))
-KeyWord:5:lambda | cond | if | define
-OpenBkt:4:/(
-CloseBkt:4:/)
-Space:4:/S(/S)*
-Identify:1:(/W|+|-|/*|/|%|!|_|/D)(/W|+|-|*|/|%|!|_|/D)*|/|/.(/.*)/|
+Identify:1:(\w|+|-|\*|/|%|!|_|\d)(\w|+|-|\*|/|%|!|_|\d)*|\|\.(\.*)\|
+KeyWord:5:lambda|cond|if|define
+OpenBkt:4:\(
+CloseBkt:4:\)
+Space:4:\s(\s)*
+Int:3:(+|-|?)(\d(\d*))
+Real:2:(+|-|?)((\d(\d)*)|(\d(\d)*).|.(\d(\d)*)|(\d(\d)*).(\d(\d)*))(?|((e|E)(+|-|?)(\d(\d)*)))
