@@ -6,6 +6,8 @@ abstract class Automata(
     val finalStates: Set<String>,
     val transitions: Map<String, Map<String, Set<String>>>) {
 
+
+  
   fun alphabetContains(signal: String) = alphabet.any {
     when (it) {
       "\\w" -> signal.all { it.isLetter() }

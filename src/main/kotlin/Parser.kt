@@ -52,7 +52,7 @@ class Parser {
     return postfix
   }
 
-  fun calculate(regexp: String): Automata {
+  fun generateAutomata(regexp: String): Automata {
     val regexpWithConcat = addConcatinationOperators(regexp)
     val regexpPostfixed = toPostfixNotation(regexpWithConcat)
     val operation = Operation()
@@ -63,53 +63,14 @@ class Parser {
         "^" -> stack.push(operation.makeConcatination(stack.pop(), stack.pop()))
         "*" -> stack.push(operation.makeIteration(stack.pop()))
         "?" -> stack.push(IndeterminateAutomata())
-        "\\*" -> stack.push(createNewAutomate("*"))
-        "\\(" -> stack.push(createNewAutomate("("))
-        "\\)" -> stack.push(createNewAutomate(")"))
-        "\\|" -> stack.push(createNewAutomate("|"))
-        else -> stack.push(createNewAutomate(literal))
+        "\\*" -> stack.push(IndeterminateAutomata("*"))
+        "\\(" -> stack.push(IndeterminateAutomata("("))
+        "\\)" -> stack.push(IndeterminateAutomata(")"))
+        "\\|" -> stack.push(IndeterminateAutomata("|"))
+        else -> stack.push(IndeterminateAutomata(literal))
       }
     }
     return stack.pop()
-  }
-
-  private fun createNewAutomate(x: String): Automata {
-    val finalStates = mutableSetOf<String>()
-    val states = mutableSetOf<String>()
-    val transitions = mutableMapOf<String, Map<String, Set<String>>>()
-    if (x == "Empty") {
-      states.add("1")
-      finalStates.add("1")
-      transitions.put("1", mutableMapOf<String, Set<String>>())
-      return IndeterminateAutomata(
-          name = x,
-          finalStates = finalStates,
-          initialStates = states,
-          transitions = transitions
-      )
-    }
-
-    finalStates.add("2")
-    val subList = mutableSetOf<String>()
-    subList.add("2")
-    val subList2 = mutableSetOf<String>()
-    subList2.add("F")
-    for (i in 1..2) {
-      val subMap = mutableMapOf<String, Set<String>>()
-      if (i == 1) {
-        subMap.put(x, subList)
-      }
-      if (i == 2) subMap.put(x, subList2)
-      transitions.put(i.toString(), subMap)
-    }
-    states.add("1")
-
-    return IndeterminateAutomata(
-        name = x,
-        finalStates = finalStates,
-        initialStates = states,
-        transitions = transitions
-    )
   }
 
   fun addConcatinationOperators(regular: String): String {

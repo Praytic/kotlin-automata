@@ -26,4 +26,12 @@
 <Real, 1.3e-6>
 <Space, \s>
 <Identify, |\sSome\scomment\s***\scond\s|>
-<Space, \n\n>
+<Space, \n\s\s>
+<My, 011000>
+<Space, \n\s\s>
+<Int, 01001010100101>
+<Space, \n\s\s>
+<Int, 01001001000100101>
+<Space, \n\s\s>
+<Int, 0010010100100101>
+<Space, \n>

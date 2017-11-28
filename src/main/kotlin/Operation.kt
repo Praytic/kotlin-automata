@@ -3,6 +3,39 @@ import java.util.*
 
 class Operation {
 
+    fun makеItеration(automata: Automata): Automata {
+    val newStateList = mutableListOf<String>()
+    newStateList.addAll(automata.initialStates)
+
+    automata.transitions.keys.filter { !automata.initialStates.contains(it) }
+        .forEach { newStateList.add(it) }
+    val newTransitionList = automata.transitions
+        .map { it.key to it.value.map { Pair<String, String>(it.value.first(), it.key) } }
+        .map { its -> its.second.map { Triple<String, String, String>(its.first, it.second, it.first) } }
+        .flatten()
+        .toMutableList()
+    automata.transitions
+        .map { it.key to it.value.map { Pair<String, String>(it.key, it.value.first()) } }
+        .map { its -> its.second.map { Triple<String, String, String>(its.first, it.second, it.first) } }
+        .flatten()
+        .filter { automata.isFinalState(it.second) }
+        .forEach {
+          val iss = it.first
+          val initialStates = automata.transitions
+              .map { it.key to it.value.map { Pair<String, String>(it.key, it.value.first()) } }
+              .map { its -> its.second.map { Triple<String, String, String>(its.first, it.second, it.first) } }
+              .flatten()
+              .filter { automata.initialStates.contains(it.first) }
+              .forEach { newTransitionList.add(Triple<String,String,String>(iss, it.third, it.second)) }
+        }
+      val newAutomate = IndeterminateAutomata(
+          initialStates = automata.initialStates,
+          finalStates = automata.finalStates,
+          transitions = automata.transitions
+      )
+      return deleteNotUsedStates(newAutomate)
+  }
+
   fun makeIteration(noDetermAutomate: Automata): Automata {
     val newStates = cloneMap(noDetermAutomate.transitions).map {
       it.key to it.value.toMutableMap()
@@ -184,8 +217,8 @@ class Operation {
       }.toMap().toMutableMap()
     }.toMap().toMutableMap()
 
-    val startState = automate.initialStates.toMutableSet()
-    val finishState = automate.finalStates.toMutableSet()
+    val initialStates = automate.initialStates.toMutableSet()
+    val finalStates = automate.finalStates.toMutableSet()
 
     var index = firstPosition
     val states = HashSet<String>(state.keys)
@@ -197,8 +230,8 @@ class Operation {
         val newState = index.toString()
         renameInStates(state, oldState, newState)
         renameOutStates(state, oldState, newState)
-        renameList(startState, oldState, newState)
-        renameList(finishState, oldState, newState)
+        renameList(initialStates, oldState, newState)
+        renameList(finalStates, oldState, newState)
         index++
       }
     }
@@ -206,8 +239,8 @@ class Operation {
         name = automate.name,
         priority = automate.priority,
         alphabet = automate.alphabet,
-        finalStates = finishState,
-        initialStates = startState,
+        finalStates = finalStates,
+        initialStates = initialStates,
         transitions = state
     )
   }

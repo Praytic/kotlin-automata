@@ -43,7 +43,7 @@ fun parseRegularExpression(str: String): Automata {
   val regularExpression = lex[2]
 
   val parser = Parser()
-  val automata = parser.calculate(regularExpression)
+  val automata = parser.generateAutomata(regularExpression)
   return IndeterminateAutomata(
       name = tokenName,
       priority = priority.toInt(),
@@ -52,3 +52,5 @@ fun parseRegularExpression(str: String): Automata {
       finalStates = automata.finalStates,
       transitions = automata.transitions)
 }
+
+val

@@ -12,4 +12,13 @@ class IndeterminateAutomata(
     finalStates = setOf("1"),
     transitions = mapOf("1" to mapOf<String, Set<String>>())
   )
+
+  constructor(singleState: String): this(
+    finalStates = mutableSetOf("2"),
+    initialStates = mutableSetOf("1"),
+    transitions = mutableMapOf(
+    "1" to mutableMapOf(singleState to mutableSetOf("2")),
+    "2" to mutableMapOf(singleState to mutableSetOf("F"))
+    )
+  )
 }
