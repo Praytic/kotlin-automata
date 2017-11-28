@@ -1,11 +1,7 @@
 
-import java.util.HashMap
-import kotlin.collections.HashSet
-import kotlin.collections.component1
-import kotlin.collections.component2
+import java.util.*
 
 class Operation {
-
 
   fun makeIteration(noDetermAutomate: Automata): Automata {
     val newStates = cloneMap(noDetermAutomate.transitions).map {
@@ -92,7 +88,7 @@ class Operation {
         initialStates = newStartStates,
         transitions = newStates,
         finalStates = newFinishStates)
-    return deleteNotUsedStates(newAutomate)
+    return newAutomate
 
   }
 
@@ -138,8 +134,8 @@ class Operation {
         name = automate.name,
         priority = automate.priority,
         alphabet = automate.alphabet,
-        initialStates = automate.initialStates, 
-        transitions = newTransitions, 
+        initialStates = automate.initialStates,
+        transitions = newTransitions,
         finalStates = newFinalStates)
   }
 

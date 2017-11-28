@@ -1,9 +1,6 @@
 
 import java.io.File
 
-val controlSymbols = arrayOf('?', '(', ')', '|', '*')
-val groupedSymbols = arrayOf("/D", "/W", "/?", "/S")
-
 fun main(args: Array<String>) {
   val automatas = mutableListOf<Automata>()
   File("input/input_task4.txt").readLines().forEach {
@@ -46,7 +43,7 @@ fun parseRegularExpression(str: String): Automata {
   val regularExpression = lex[2]
 
   val parser = Parser()
-  val automata = parser.calculate(parser.parse(regularExpression, makeRegular(regularExpression)))
+  val automata = parser.calculate(regularExpression)
   return IndeterminateAutomata(
       name = tokenName,
       priority = priority.toInt(),
@@ -54,17 +51,4 @@ fun parseRegularExpression(str: String): Automata {
       initialStates = automata.initialStates,
       finalStates = automata.finalStates,
       transitions = automata.transitions)
-}
-
-fun makeRegular(regular: String): String {
-  var reg = ""
-  for (i in 0..regular.length - 2) {
-    if (regular[i] != '(' && regular[i] != '|' && regular[i] != '^' && regular[i] != '\\' &&
-        regular[i + 1] != ')' && regular[i + 1] != '|' && regular[i + 1] != '*' || i > 1 && regular[i - 1] == '\\' && regular[i] == '|') {
-      reg += "${regular[i]}^"
-    }
-    else reg += regular[i]
-  }
-  reg += regular.last()
-  return reg
 }

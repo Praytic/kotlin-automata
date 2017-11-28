@@ -7,7 +7,7 @@ abstract class Automata(
     val transitions: Map<String, Map<String, Set<String>>>) {
 
   fun alphabetContains(signal: String) = alphabet.any {
-    when(it) {
+    when (it) {
       "\\w" -> signal.all { it.isLetter() }
       "\\d" -> signal.all { it.isDigit() }
       "\\s" -> signal.all { it.isWhitespace() }
@@ -27,7 +27,8 @@ abstract class Automata(
         nextStates = transitions[currentState]?.get("\\w") ?: emptySet()
       signal.all { it.isDigit() } && transitions[currentState]?.containsKey("\\d") ?: false ->
         nextStates = transitions[currentState]?.get("\\d") ?: emptySet()
-      signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey("\\s") ?: false ->
+      signal.all { it.isWhitespace() } && transitions[currentState]?.containsKey(
+          "\\s") ?: false ->
         nextStates = transitions[currentState]?.get("\\s") ?: emptySet()
       signal != "|" && transitions[currentState]?.containsKey("\\.") ?: false ->
         nextStates = transitions[currentState]?.get("\\.") ?: emptySet()
