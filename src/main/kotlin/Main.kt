@@ -1,22 +1,24 @@
-import com.google.gson.Gson
+
 import java.io.File
 
 fun main(args: Array<String>) {
-  val automatas = arrayListOf<Automata>(
-      Gson().fromJson(File("input/identificator.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/keyword.json").reader(), IndeterminateAutomata::class.java),
-      Gson().fromJson(File("input/integer_number.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/real_number.json").reader(), IndeterminateAutomata::class.java),
-      Gson().fromJson(File("input/open_bracket.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/close_bracket.json").reader(), DeterministicAutomata::class.java),
-      Gson().fromJson(File("input/space.json").reader(), DeterministicAutomata::class.java))
-
-  val results = task3(automatas, "2.5asdaifs define if 24,-24e2;())(sd4e-2.3\t\n dep conlambdadac")
-  println()
-  println("Result:")
-  for (result in results) {
-    println(result)
+  val automatas = mutableListOf<Automata>()
+  File("input/input_task4.txt").readLines().forEach {
+    val automata = parseRegularExpression(it)
+    //File("output/$automata.json").writeText(Gson().toJson(automata))
+    automatas.add(automata)
   }
+
+  val results = task3(automatas, File("input/input.txt").readText())
+
+  var stringResult = ""
+  println("\nResults:\n")
+  for (result in results) {
+    stringResult += "<${result.first}, ${result.second}>\n"
+  }
+
+  println(stringResult)
+  File("output/output_4.txt").writeText(stringResult)
 }
 
 fun replaceWithEscapeSymbols(str: String): String {
@@ -33,3 +35,22 @@ fun replaceWithEscapeSymbols(str: String): String {
   }
   return newStr
 }
+
+fun parseRegularExpression(str: String): Automata {
+  val lex = str.split(':')
+  val tokenName = lex[0]
+  val priority = lex[1]
+  val regularExpression = lex[2]
+
+  val parser = Parser()
+  val automata = parser.generateAutomata(regularExpression)
+  return IndeterminateAutomata(
+      name = tokenName,
+      priority = priority.toInt(),
+      alphabet = automata.alphabet,
+      initialStates = automata.initialStates,
+      finalStates = automata.finalStates,
+      transitions = automata.transitions)
+}
+
+val
